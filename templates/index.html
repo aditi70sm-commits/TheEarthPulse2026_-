@@ -1,0 +1,609 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EARTHPULSE | Earth Intelligence</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+</head>
+
+<body>
+
+<header>
+    <h2>🌍 EARTHPULSE</h2>
+    <p>Understanding Our Planet Through Data</p>
+</header>
+
+<main>
+
+    <!-- HERO SECTION -->
+
+    <section class="hero">
+
+        <h1>Explore Our Living Planet</h1>
+
+        <p>
+            Monitor Earth using satellite observations,
+            environmental data and intelligent analysis.
+        </p>
+
+        <button onclick="loadEarthData()">
+            Explore Earth
+        </button>
+
+    </section>
+
+
+    <!-- MAIN DASHBOARD -->
+
+    <section class="dashboard">
+
+        <h2>Earth Observation Dashboard</h2>
+
+        <p class="location" id="dashboardLocation">
+            📍 Select a location
+        </p>
+
+        <p id="status">
+            Loading NASA observations...
+        </p>
+
+
+        <!-- SUMMARY CARDS -->
+
+        <div class="features">
+
+            <div class="card">
+                <h3>🌡️ Temperature Trend</h3>
+                <p id="temperatureTrend">Waiting for data...</p>
+                <p id="temperatureSlope"></p>
+            </div>
+
+            <div class="card">
+                <h3>🌧️ Rainfall Trend</h3>
+                <p id="rainfallTrend">Waiting for data...</p>
+                <p id="rainfallSlope"></p>
+            </div>
+
+            <div class="card">
+                <h3>⚠️ Environmental Anomalies</h3>
+                <p id="anomalyCount">Waiting for data...</p>
+            </div>
+
+        </div>
+
+
+        <!-- TEMPERATURE CHART -->
+
+        <div class="chart-container">
+
+            <h3>🌡️ Annual Average Temperature</h3>
+
+            <canvas id="temperatureChart"></canvas>
+
+        </div>
+
+
+        <!-- RAINFALL CHART -->
+
+        <div class="chart-container">
+
+            <h3>🌧️ Annual Precipitation</h3>
+
+            <canvas id="rainfallChart"></canvas>
+
+        </div>
+
+
+        <!-- ENVIRONMENTAL INSIGHTS -->
+
+        <section class="insights">
+
+            <h2>🌍 Environmental Intelligence</h2>
+
+            <div class="card">
+
+                <h3>Temperature Insights</h3>
+
+                <p id="temperatureInsight">
+                    Temperature analysis will appear here.
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Rainfall Insights</h3>
+
+                <p id="rainfallInsight">
+                    Rainfall analysis will appear here.
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>⚠️ Detected Anomalies</h3>
+
+                <div id="anomalyDetails">
+                    No anomaly analysis available yet.
+                </div>
+
+            </div>
+
+        </section>
+
+    </section>
+
+
+    <!-- INTERACTIVE INDIA MAP -->
+
+    <section class="india-map-section">
+
+        <h2>🌏 Explore India</h2>
+
+        <p>
+            Select an Indian state on the map to explore
+            its environmental observations.
+        </p>
+
+
+        <!-- STATE SEARCH -->
+
+        <div class="state-search">
+
+            <h3>🔎 Search Indian State</h3>
+
+            <input
+                type="text"
+                id="stateSearch"
+                list="indiaStates"
+                placeholder="Type a state name..."
+                autocomplete="off"
+            >
+
+            <datalist id="indiaStates"></datalist>
+
+            <p>
+                Select a state from the suggestions to explore its climate data.
+            </p>
+
+        </div>
+
+
+        <div id="indiaMap"></div>
+
+        <div id="selectedLocation">
+            Select an Indian state to explore.
+        </div>
+
+    </section>
+
+
+    <!-- TWO-STATE CLIMATE COMPARISON -->
+
+    <section class="comparison-section" id="comparisonSection">
+
+        <h2>📊 Compare Indian States</h2>
+
+        <p>
+            Compare historical temperature and rainfall
+            observations between two Indian states.
+        </p>
+
+
+        <div class="comparison-controls">
+
+            <div class="comparison-select">
+
+                <label for="compareState1">
+                    First State
+                </label>
+
+                <select id="compareState1">
+
+                    <option value="">
+                        Select first state
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="comparison-select">
+
+                <label for="compareState2">
+                    Second State
+                </label>
+
+                <select id="compareState2">
+
+                    <option value="">
+                        Select second state
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <button id="compareButton" type="button">
+            Compare Climate
+        </button>
+
+        <p id="comparisonStatus">
+            Select two states to begin comparison.
+        </p>
+
+
+        <!-- COMPARISON SUMMARY -->
+
+        <div id="comparisonSummary" class="comparison-summary">
+
+            <div class="card">
+
+                <h3>🌡️ Temperature Comparison</h3>
+
+                <p id="temperatureComparison">
+                    Waiting for comparison...
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>🌧️ Rainfall Comparison</h3>
+
+                <p id="rainfallComparison">
+                    Waiting for comparison...
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>🌍 Climate Intelligence</h3>
+
+                <p id="climateComparisonInsight">
+                    Comparison insights will appear here.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- TEMPERATURE COMPARISON CHART -->
+
+        <div class="chart-container comparison-chart">
+
+            <h3>🌡️ State-wise Temperature Comparison</h3>
+
+            <canvas id="comparisonTemperatureChart"></canvas>
+
+        </div>
+
+
+        <!-- RAINFALL COMPARISON CHART -->
+
+        <div class="chart-container comparison-chart">
+
+            <h3>🌧️ State-wise Rainfall Comparison</h3>
+
+            <canvas id="comparisonRainfallChart"></canvas>
+
+        </div>
+
+
+        <p class="data-note">
+
+            Data source: NASA POWER.
+
+            Each state represents climate observations at its
+            representative coordinates, not official state-wide averages.
+
+        </p>
+
+    </section>
+
+
+    <!-- =====================================
+         NEW SATELLITE MONITORING SECTION
+    ====================================== -->
+
+    <section class="satellite-section" id="satelliteSection">
+
+        <h2>🛰️ Satellite Monitoring</h2>
+
+        <p>
+            Explore satellite observations of Earth using
+            NASA Global Imagery Browse Services (GIBS).
+        </p>
+
+
+        <!-- SATELLITE CONTROLS -->
+
+        <div class="satellite-controls">
+
+            <div class="satellite-control">
+
+                <label for="satelliteDate">
+                    📅 Select Observation Date
+                </label>
+
+                <input
+                    type="date"
+                    id="satelliteDate"
+                >
+
+            </div>
+
+
+            <div class="satellite-control">
+
+                <label for="satelliteLayer">
+                    🛰️ Select Satellite Layer
+                </label>
+
+                <select id="satelliteLayer">
+
+                    <option value="terra">
+                        MODIS Terra True Color
+                    </option>
+
+                    <option value="aqua">
+                        MODIS Aqua True Color
+                    </option>
+
+                    <option value="viirs">
+                        VIIRS SNPP True Color
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="loadSatelliteButton"
+        >
+            Load Satellite Imagery
+        </button>
+
+
+        <!-- SATELLITE STATUS -->
+
+        <p id="satelliteStatus">
+            Select a date and satellite layer to explore imagery.
+        </p>
+
+
+        <!-- SATELLITE MAP -->
+
+        <div class="satellite-map-container">
+
+            <div id="satelliteMap"></div>
+
+        </div>
+
+
+        <!-- SATELLITE INFORMATION -->
+
+        <div class="card satellite-information">
+
+            <h3>🌍 Satellite Observation Information</h3>
+
+            <p id="satelliteInfo">
+                Satellite observation details will appear here.
+            </p>
+
+            <p class="data-note">
+                Source: NASA Global Imagery Browse Services (GIBS).
+                Imagery availability depends on the selected date and layer.
+                Images are not necessarily real-time.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         NEW CLIMATE INSIGHTS SECTION
+    ====================================== -->
+
+    <section class="climate-insights-section" id="climateInsightsSection">
+
+        <h2>🌦️ Climate Insights</h2>
+
+        <p>
+            Understand historical environmental changes
+            through NASA POWER climate observations.
+        </p>
+
+
+        <!-- INSIGHT LOCATION -->
+
+        <div class="climate-insights-controls">
+
+            <div>
+
+                <label for="insightState">
+                    Select State
+                </label>
+
+                <select id="insightState">
+
+                    <option value="Bihar">
+                        Bihar
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="loadClimateInsightsButton"
+            >
+                Generate Climate Insights
+            </button>
+
+        </div>
+
+
+        <p id="climateInsightsStatus">
+            Select a state to explore its climate insights.
+        </p>
+
+
+        <!-- DYNAMIC CLIMATE INSIGHTS -->
+
+        <div
+            class="climate-insights-grid"
+            id="climateInsightsContainer"
+        >
+
+            <div class="card">
+
+                <h3>🌡️ Temperature Analysis</h3>
+
+                <p>
+                    Climate temperature insights will appear here.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>🌧️ Rainfall Analysis</h3>
+
+                <p>
+                    Climate rainfall insights will appear here.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>🌍 Environmental Interpretation</h3>
+
+                <p>
+                    Historical environmental observations
+                    will appear here.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <p class="data-note">
+
+            Data source: NASA POWER.
+
+            Climate insights are based on historical observations
+            at representative coordinates. They are not forecasts
+            or official disaster warnings.
+
+        </p>
+
+    </section>
+
+
+    <!-- FEATURES SECTION -->
+
+    <section class="features">
+
+        <div class="card">
+
+            <h3>🛰️ Satellite Monitoring</h3>
+
+            <p>
+                Explore NASA satellite imagery and
+                Earth observation layers.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>🌦️ Climate Insights</h3>
+
+            <p>
+                Understand historical temperature,
+                rainfall and environmental trends.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>🌳 Environmental Analysis</h3>
+
+            <p>
+                Study changes across our planet.
+            </p>
+
+            <hr>
+
+            <p>
+                Explore state-wise temperature,
+                rainfall and environmental trends
+                using the interactive India map.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <p>EARTHPULSE | Powered by NASA POWER and NASA GIBS</p>
+
+    <p>Historical Climate Observation Period: 2015–2024</p>
+
+</footer>
+
+
+<!-- LEAFLET -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+<!-- EARTHPULSE JAVASCRIPT -->
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+
+</body>
+</html>
